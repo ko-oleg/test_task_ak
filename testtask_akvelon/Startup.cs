@@ -23,15 +23,27 @@ namespace testtask_akvelon
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            // добавляем контекст ApplicationContext в качестве сервиса в приложение
+            // services.AddDbContext<ApplicationContext>(options =>
+            //     options.UseSqlServer(connection));
             services.AddControllersWithViews();
+            
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "testtast_akvelon"));
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
+                
             }
             else
             {
@@ -53,6 +65,7 @@ namespace testtask_akvelon
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }
